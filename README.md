@@ -1,12 +1,4 @@
-# GenUX: LLM-Based User Behavior Drift Detection for Generative User Experience Systems
 
-**Author:** Mithradevi Kumar  
-**Affiliation:** Chennai Institute of Technology, Computer Science and Engineering  
-**Contact:** mithradevik.cse2023@citcchennai.net
-
-**ORCID** 0009-0001-4856-541X
-
----
 
 ## Overview
 
@@ -50,6 +42,9 @@ GenUX consists of four main components:
 
 **Pipeline Illustration:**  
 Data flows from collection through statistical and LLM analysis, merging insights in a fusion layer, and finally triggering outputs such as dashboards, APIs, or adaptive UI changes.
+
+### Architecture Diagram
+![GenUX System Architecture](Architecture.png)
 
 ---
 
