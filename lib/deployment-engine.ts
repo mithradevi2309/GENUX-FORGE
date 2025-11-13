@@ -134,31 +134,50 @@ export class DeploymentEngine {
 
   // Placeholder methods for undeclared variables
   private async generateTestId(): Promise<string> {
-    return "test-id"
+    return `test-${Math.random().toString(36).slice(2, 9)}`
   }
 
   private async getCurrentUI(): Promise<any[]> {
-    return []
+    // Return a simple representation of current UI for A/B baseline
+    return [{ id: 'root', type: 'layout', properties: {} }]
   }
 
   private async startMetricsCollection(testId: string): Promise<void> {
-    // Implementation here
+    // Lightweight in-memory stub: seed some baseline metrics for the test
+    const ab = this.abTests.get(testId)
+    if (!ab) return
+    ab.metrics = ab.metrics || {}
+    ab.metrics.baseline = { conversionRate: 0.05, engagementRate: 0.2, errorRate: 0.001, taskCompletionTime: 120 }
+    this.abTests.set(testId, ab)
   }
 
   private async waitForTestCompletion(testId: string): Promise<any> {
-    return { result: "test-completed" }
+    // Simulate a short running test and return a simple result with improvement metric
+    const ab = this.abTests.get(testId)
+    await this.sleep(200) // allow slight delay
+    // Very small simulated improvements for treatment
+    const improvement = 0.06
+    return { result: 'test-completed', improvement }
   }
 
   private async createUISnapshot(): Promise<any> {
-    return { snapshot: "ui-snapshot" }
+    return { snapshot: { ui: await this.getCurrentUI(), ts: Date.now() } }
   }
 
   private async validateUIComponents(uiComponents: any[]): Promise<{ isValid: boolean; errors: string[] }> {
-    return { isValid: true, errors: [] }
+    const errors: string[] = []
+    if (!Array.isArray(uiComponents)) errors.push('uiComponents must be an array')
+    else {
+      for (const c of uiComponents) {
+        if (!c || !c.id) errors.push('component missing id')
+      }
+    }
+    return { isValid: errors.length === 0, errors }
   }
 
   private async deployToPercentage(uiComponents: any[], percentage: number, deploymentId: string): Promise<void> {
-    // Implementation here
+    // Stub: record deployment intent
+    this.deploymentQueue.push({ deploymentId, uiComponents, percentage, ts: Date.now() })
   }
 
   private async getDeploymentMetrics(deploymentId: string): Promise<any> {
@@ -166,7 +185,10 @@ export class DeploymentEngine {
   }
 
   private async rollback(snapshot: any): Promise<void> {
-    // Implementation here
+    // Restore last snapshot if available
+    if (!snapshot) return
+    // For stub, just log
+    this.rollbackStack = this.rollbackStack.filter((s) => s !== snapshot)
   }
 
   private async sleep(ms: number): Promise<void> {
@@ -174,6 +196,6 @@ export class DeploymentEngine {
   }
 
   private async generateDeploymentId(): Promise<string> {
-    return "deployment-id"
+    return `dep-${Math.random().toString(36).slice(2, 9)}`
   }
 }
