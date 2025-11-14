@@ -54,23 +54,48 @@ export class GenUXEngine {
 
   // Core GenUX Process
   async processUserInteraction(interaction: UserInteraction): Promise<void> {
-    // 1. Learn from interaction
-    await this.behaviorModel.learn(interaction)
+    // 1. Learn from interaction (best-effort)
+    try {
+      if (this.behaviorModel && typeof (this.behaviorModel as any).learn === 'function') {
+        await this.behaviorModel.learn(interaction)
+      }
+    } catch (err) {
+      console.warn('behaviorModel.learn failed:', (err as any)?.message || String(err))
+    }
 
-    // 2. Predict user needs
-    const prediction = await this.behaviorModel.predictUserNeeds(interaction.userId)
+    // 2. Predict user needs (best-effort)
+    let prediction: any = { confidence: 0 }
+    try {
+      if (this.behaviorModel && typeof (this.behaviorModel as any).predictUserNeeds === 'function') {
+        prediction = await this.behaviorModel.predictUserNeeds(interaction.userId)
+      }
+    } catch (err) {
+      console.warn('behaviorModel.predictUserNeeds failed:', (err as any)?.message || String(err))
+    }
 
-    // 3. Generate optimized UI
-    if (prediction.confidence > 0.8) {
-      const optimizedUI = await this.uiGenerator.generateOptimizedInterface(prediction)
+    // 3. Generate optimized UI and safely A/B test + deploy
+    if (prediction && prediction.confidence > 0.8) {
+      try {
+        // prefer generateOptimizedInterface if available, else generatePersonalizedUI
+        let optimizedUI
+        if (typeof (this.uiGenerator as any).generateOptimizedInterface === 'function') {
+          optimizedUI = await (this.uiGenerator as any).generateOptimizedInterface(prediction)
+        } else {
+          // map prediction -> userProfile/context shape for generatePersonalizedUI
+          const userProfile = prediction.userProfile || { personalizationScores: prediction.personalizationScores || [], completionRate: prediction.completionRate || 0.6, commonPaths: prediction.commonPaths || [], formBehavior: prediction.formBehavior || {}, readingPatterns: prediction.readingPatterns || [], conversionBehavior: prediction.conversionBehavior || {} }
+          const ctx = prediction.context || {}
+          optimizedUI = await this.uiGenerator.generatePersonalizedUI(userProfile, ctx)
+        }
 
-      // 4. A/B test the change
-      const testResult = await this.deploymentEngine.runABTest(optimizedUI)
+        // 4. A/B test the change
+        const testResult = await this.deploymentEngine.runABTest(optimizedUI)
 
-      // 5. Deploy if successful
-      if (testResult.improvement > 0.05) {
-        // 5% improvement threshold
-        await this.deploymentEngine.deployUIChange(optimizedUI)
+        // 5. Deploy if successful
+        if (testResult && testResult.improvement > 0.05) {
+          await this.deploymentEngine.deployUIChange(optimizedUI)
+        }
+      } catch (err) {
+        console.warn('UI generation / deployment failed:', (err as any)?.message || String(err))
       }
     }
   }
@@ -84,7 +109,19 @@ export class GenUXEngine {
   }
 
   private async analyzeContext(context: any): Promise<any> {
-    // Placeholder for context analysis logic
-    return context
+    // Lightweight context normalization: extract key fields and provide defaults
+    try {
+      const normalized = {
+        taskType: context?.taskType || 'browse',
+        userIntent: context?.userIntent || (context?.query ? 'search' : 'explore'),
+        device: context?.device || 'web',
+        frustrationLevel: typeof context?.frustrationLevel === 'number' ? context.frustrationLevel : 0,
+        completionRate: typeof context?.completionRate === 'number' ? context.completionRate : 0.75,
+        timestamp: context?.timestamp || new Date().toISOString(),
+      }
+      return normalized
+    } catch (err) {
+      return { taskType: 'browse', userIntent: 'explore', device: 'web', frustrationLevel: 0, completionRate: 0.75 }
+    }
   }
 }

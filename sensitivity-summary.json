@@ -1,0 +1,399 @@
+{
+  "datasetSize": 11355,
+  "transitionCount": 5,
+  "driftLevels": {
+    "NONE": 0,
+    "SMALL": 0.05,
+    "MEDIUM": 0.15,
+    "LARGE": 0.3
+  },
+  "transitions": [
+    {
+      "description": "No drift (control)",
+      "statSig": 0,
+      "driftScore": 0.2868,
+      "trueLabel": false,
+      "computeTimeMs": 3
+    },
+    {
+      "description": "Small positive drift (+5%)",
+      "statSig": 0.2779,
+      "driftScore": 0.398,
+      "trueLabel": false,
+      "computeTimeMs": 2
+    },
+    {
+      "description": "Medium positive drift (+15%)",
+      "statSig": 0.9333,
+      "driftScore": 0.6601,
+      "trueLabel": true,
+      "computeTimeMs": 2
+    },
+    {
+      "description": "Large positive drift (+30%)",
+      "statSig": 1.583,
+      "driftScore": 0.92,
+      "trueLabel": true,
+      "computeTimeMs": 3
+    },
+    {
+      "description": "Large negative drift (-30%)",
+      "statSig": 2.2356,
+      "driftScore": 1.181,
+      "trueLabel": true,
+      "computeTimeMs": 2
+    }
+  ],
+  "evaluation": {
+    "metrics": [
+      {
+        "threshold": 0.02,
+        "TP": 3,
+        "FP": 2,
+        "TN": 0,
+        "FN": 0,
+        "precision": 0.6,
+        "recall": 1,
+        "f1": 0.7499999999999999,
+        "fpr": 1,
+        "fnr": 0
+      },
+      {
+        "threshold": 0.03,
+        "TP": 3,
+        "FP": 2,
+        "TN": 0,
+        "FN": 0,
+        "precision": 0.6,
+        "recall": 1,
+        "f1": 0.7499999999999999,
+        "fpr": 1,
+        "fnr": 0
+      },
+      {
+        "threshold": 0.04,
+        "TP": 3,
+        "FP": 2,
+        "TN": 0,
+        "FN": 0,
+        "precision": 0.6,
+        "recall": 1,
+        "f1": 0.7499999999999999,
+        "fpr": 1,
+        "fnr": 0
+      },
+      {
+        "threshold": 0.05,
+        "TP": 3,
+        "FP": 2,
+        "TN": 0,
+        "FN": 0,
+        "precision": 0.6,
+        "recall": 1,
+        "f1": 0.7499999999999999,
+        "fpr": 1,
+        "fnr": 0
+      },
+      {
+        "threshold": 0.06,
+        "TP": 3,
+        "FP": 2,
+        "TN": 0,
+        "FN": 0,
+        "precision": 0.6,
+        "recall": 1,
+        "f1": 0.7499999999999999,
+        "fpr": 1,
+        "fnr": 0
+      },
+      {
+        "threshold": 0.07,
+        "TP": 3,
+        "FP": 2,
+        "TN": 0,
+        "FN": 0,
+        "precision": 0.6,
+        "recall": 1,
+        "f1": 0.7499999999999999,
+        "fpr": 1,
+        "fnr": 0
+      },
+      {
+        "threshold": 0.08,
+        "TP": 3,
+        "FP": 2,
+        "TN": 0,
+        "FN": 0,
+        "precision": 0.6,
+        "recall": 1,
+        "f1": 0.7499999999999999,
+        "fpr": 1,
+        "fnr": 0
+      },
+      {
+        "threshold": 0.09,
+        "TP": 3,
+        "FP": 2,
+        "TN": 0,
+        "FN": 0,
+        "precision": 0.6,
+        "recall": 1,
+        "f1": 0.7499999999999999,
+        "fpr": 1,
+        "fnr": 0
+      },
+      {
+        "threshold": 0.1,
+        "TP": 3,
+        "FP": 2,
+        "TN": 0,
+        "FN": 0,
+        "precision": 0.6,
+        "recall": 1,
+        "f1": 0.7499999999999999,
+        "fpr": 1,
+        "fnr": 0
+      },
+      {
+        "threshold": 0.11,
+        "TP": 3,
+        "FP": 2,
+        "TN": 0,
+        "FN": 0,
+        "precision": 0.6,
+        "recall": 1,
+        "f1": 0.7499999999999999,
+        "fpr": 1,
+        "fnr": 0
+      },
+      {
+        "threshold": 0.12,
+        "TP": 3,
+        "FP": 2,
+        "TN": 0,
+        "FN": 0,
+        "precision": 0.6,
+        "recall": 1,
+        "f1": 0.7499999999999999,
+        "fpr": 1,
+        "fnr": 0
+      },
+      {
+        "threshold": 0.13,
+        "TP": 3,
+        "FP": 2,
+        "TN": 0,
+        "FN": 0,
+        "precision": 0.6,
+        "recall": 1,
+        "f1": 0.7499999999999999,
+        "fpr": 1,
+        "fnr": 0
+      },
+      {
+        "threshold": 0.14,
+        "TP": 3,
+        "FP": 2,
+        "TN": 0,
+        "FN": 0,
+        "precision": 0.6,
+        "recall": 1,
+        "f1": 0.7499999999999999,
+        "fpr": 1,
+        "fnr": 0
+      },
+      {
+        "threshold": 0.15,
+        "TP": 3,
+        "FP": 2,
+        "TN": 0,
+        "FN": 0,
+        "precision": 0.6,
+        "recall": 1,
+        "f1": 0.7499999999999999,
+        "fpr": 1,
+        "fnr": 0
+      },
+      {
+        "threshold": 0.16,
+        "TP": 3,
+        "FP": 2,
+        "TN": 0,
+        "FN": 0,
+        "precision": 0.6,
+        "recall": 1,
+        "f1": 0.7499999999999999,
+        "fpr": 1,
+        "fnr": 0
+      },
+      {
+        "threshold": 0.17,
+        "TP": 3,
+        "FP": 2,
+        "TN": 0,
+        "FN": 0,
+        "precision": 0.6,
+        "recall": 1,
+        "f1": 0.7499999999999999,
+        "fpr": 1,
+        "fnr": 0
+      },
+      {
+        "threshold": 0.18,
+        "TP": 3,
+        "FP": 2,
+        "TN": 0,
+        "FN": 0,
+        "precision": 0.6,
+        "recall": 1,
+        "f1": 0.7499999999999999,
+        "fpr": 1,
+        "fnr": 0
+      },
+      {
+        "threshold": 0.19,
+        "TP": 3,
+        "FP": 2,
+        "TN": 0,
+        "FN": 0,
+        "precision": 0.6,
+        "recall": 1,
+        "f1": 0.7499999999999999,
+        "fpr": 1,
+        "fnr": 0
+      },
+      {
+        "threshold": 0.2,
+        "TP": 3,
+        "FP": 2,
+        "TN": 0,
+        "FN": 0,
+        "precision": 0.6,
+        "recall": 1,
+        "f1": 0.7499999999999999,
+        "fpr": 1,
+        "fnr": 0
+      },
+      {
+        "threshold": 0.21,
+        "TP": 3,
+        "FP": 2,
+        "TN": 0,
+        "FN": 0,
+        "precision": 0.6,
+        "recall": 1,
+        "f1": 0.7499999999999999,
+        "fpr": 1,
+        "fnr": 0
+      },
+      {
+        "threshold": 0.22,
+        "TP": 3,
+        "FP": 2,
+        "TN": 0,
+        "FN": 0,
+        "precision": 0.6,
+        "recall": 1,
+        "f1": 0.7499999999999999,
+        "fpr": 1,
+        "fnr": 0
+      },
+      {
+        "threshold": 0.23,
+        "TP": 3,
+        "FP": 2,
+        "TN": 0,
+        "FN": 0,
+        "precision": 0.6,
+        "recall": 1,
+        "f1": 0.7499999999999999,
+        "fpr": 1,
+        "fnr": 0
+      },
+      {
+        "threshold": 0.24,
+        "TP": 3,
+        "FP": 2,
+        "TN": 0,
+        "FN": 0,
+        "precision": 0.6,
+        "recall": 1,
+        "f1": 0.7499999999999999,
+        "fpr": 1,
+        "fnr": 0
+      },
+      {
+        "threshold": 0.25,
+        "TP": 3,
+        "FP": 2,
+        "TN": 0,
+        "FN": 0,
+        "precision": 0.6,
+        "recall": 1,
+        "f1": 0.7499999999999999,
+        "fpr": 1,
+        "fnr": 0
+      },
+      {
+        "threshold": 0.26,
+        "TP": 3,
+        "FP": 2,
+        "TN": 0,
+        "FN": 0,
+        "precision": 0.6,
+        "recall": 1,
+        "f1": 0.7499999999999999,
+        "fpr": 1,
+        "fnr": 0
+      },
+      {
+        "threshold": 0.27,
+        "TP": 3,
+        "FP": 2,
+        "TN": 0,
+        "FN": 0,
+        "precision": 0.6,
+        "recall": 1,
+        "f1": 0.7499999999999999,
+        "fpr": 1,
+        "fnr": 0
+      },
+      {
+        "threshold": 0.28,
+        "TP": 3,
+        "FP": 2,
+        "TN": 0,
+        "FN": 0,
+        "precision": 0.6,
+        "recall": 1,
+        "f1": 0.7499999999999999,
+        "fpr": 1,
+        "fnr": 0
+      },
+      {
+        "threshold": 0.29,
+        "TP": 3,
+        "FP": 1,
+        "TN": 1,
+        "FN": 0,
+        "precision": 0.75,
+        "recall": 1,
+        "f1": 0.8571428571428571,
+        "fpr": 0.5,
+        "fnr": 0
+      }
+    ],
+    "best": {
+      "threshold": 0.29,
+      "TP": 3,
+      "FP": 1,
+      "TN": 1,
+      "FN": 0,
+      "precision": 0.75,
+      "recall": 1,
+      "f1": 0.8571428571428571,
+      "fpr": 0.5,
+      "fnr": 0
+    }
+  }
+}

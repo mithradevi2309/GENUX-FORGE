@@ -3,6 +3,10 @@ export class BehaviorTracker {
   private interactions: any[] = []
   private heatmapData: any[] = []
   private frustrationDetector: any
+  private readonly MAX_HEATMAP_SIZE = 10000 // Circular buffer limit (~2min at 60Hz)
+  private readonly MAX_INTERACTIONS = 5000
+  private lastClickTime?: number
+  private lastClickTarget?: string
 
   constructor() {
     this.frustrationDetector = {}
@@ -10,17 +14,26 @@ export class BehaviorTracker {
   }
 
   private initializeTracking() {
+    // Guard for non-browser environments
+    if (typeof document === 'undefined') return
+
     // Mouse movement tracking
     document.addEventListener("mousemove", this.trackMouseMovement.bind(this))
 
     // Click pattern analysis
-    document.addEventListener("click", this.analyzeClickPattern.bind(this))
+    if (typeof (this as any).analyzeClickPattern === 'function') {
+      document.addEventListener("click", (this as any).analyzeClickPattern.bind(this))
+    }
 
     // Scroll behavior tracking
-    document.addEventListener("scroll", this.trackScrollBehavior.bind(this))
+    if (typeof (this as any).trackScrollBehavior === 'function') {
+      document.addEventListener("scroll", (this as any).trackScrollBehavior.bind(this))
+    }
 
     // Form interaction analysis
-    document.addEventListener("input", this.analyzeFormInteraction.bind(this))
+    if (typeof (this as any).analyzeFormInteraction === 'function') {
+      document.addEventListener("input", (this as any).analyzeFormInteraction.bind(this))
+    }
 
     // Mobile gesture tracking
     if ("ontouchstart" in window) {
@@ -58,6 +71,8 @@ export class BehaviorTracker {
       timestamp: Date.now(),
       intensity: this.calculateIntensity(event),
     })
+    // O(1) amortized: only trims when size exceeded
+    this.enforceHeatmapLimit()
   }
 
   // Click pattern analysis for frustration detection
@@ -153,45 +168,109 @@ export class BehaviorTracker {
   }
 
   private getRecentMouseMovements(duration: number): any[] {
-    // Placeholder for recent movements retrieval logic
-    return []
+    const cutoff = Date.now() - duration
+    // return last movements within duration
+    return this.heatmapData.filter((h) => h.timestamp >= cutoff)
   }
 
   private calculateMovementEntropy(movements: any[]): number {
-    // Placeholder for entropy calculation logic
-    return 0
+    if (!movements || movements.length < 2) return 0
+    // discretize directions into bins
+    const dirs: Record<string, number> = {}
+    for (let i = 1; i < movements.length; i++) {
+      const a = movements[i - 1]
+      const b = movements[i]
+      const dx = b.x - a.x
+      const dy = b.y - a.y
+      const angle = Math.round((Math.atan2(dy, dx) * 180) / Math.PI / 30) * 30
+      const key = String(angle)
+      dirs[key] = (dirs[key] || 0) + 1
+    }
+    const total = Object.values(dirs).reduce((s, v) => s + v, 0)
+    let entropy = 0
+    for (const k in dirs) {
+      const p = dirs[k] / total
+      entropy -= p * Math.log2(p)
+    }
+    // normalize to [0,1]
+    const max = Math.log2(Math.max(2, Object.keys(dirs).length))
+    return max === 0 ? 0 : Math.min(1, entropy / max)
   }
 
   private calculateAverageVelocity(movements: any[]): number {
-    // Placeholder for average velocity calculation logic
-    return 0
+    if (!movements || movements.length < 2) return 0
+    let s = 0
+    let count = 0
+    for (let i = 1; i < movements.length; i++) {
+      const a = movements[i - 1]
+      const b = movements[i]
+      const dt = (b.timestamp - a.timestamp) / 1000
+      if (dt <= 0) continue
+      const dx = b.x - a.x
+      const dy = b.y - a.y
+      const dist = Math.sqrt(dx * dx + dy * dy)
+      s += dist / dt
+      count++
+    }
+    return count === 0 ? 0 : s / count
   }
 
   private classifyGesture(gestureData: any): any {
-    // Placeholder for gesture classification logic
-    return {}
+    // Simple classifier: swipe if distance > 50 and duration < 500ms
+    const dx = gestureData.endPos.x - gestureData.startPos.x
+    const dy = gestureData.endPos.y - gestureData.startPos.y
+    const dist = Math.sqrt(dx * dx + dy * dy)
+    const type = dist > 50 && gestureData.duration < 500 ? 'swipe' : 'tap'
+    return { type, duration: gestureData.duration, distance: dist }
   }
 
   private recordGesture(gesture: any): void {
-    // Placeholder for gesture recording logic
+    this.interactions.push({ type: 'gesture', gesture, timestamp: Date.now() })
+    this.enforceInteractionLimit()
   }
 
   private calculateIntensity(event: MouseEvent): number {
-    // Placeholder for intensity calculation logic
-    return 0
+    // intensity based on movement speed relative to viewport size
+    const v = Math.sqrt(Math.pow(event.movementX || 0, 2) + Math.pow(event.movementY || 0, 2))
+    const norm = Math.min(1, v / Math.max(1, window.innerWidth / 10))
+    return Number((norm).toFixed(2))
   }
 
   private detectRapidClicking(event: MouseEvent): boolean {
-    // Placeholder for rapid clicking detection logic
-    return false
+    const now = Date.now()
+    const last = this.lastClickTime || 0
+    this.lastClickTime = now
+    const diff = now - last
+    return diff > 0 && diff < 300 // clicks within 300ms
   }
 
   private detectDeadClick(event: MouseEvent): boolean {
-    // Placeholder for dead click detection logic
-    return false
+    const target = (event.target as HTMLElement)?.id || (event.target as HTMLElement)?.className || ''
+    const lastTarget = this.lastClickTarget || ''
+    this.lastClickTarget = target
+    // dead click heuristic: same element clicked many times but no navigation
+    return !!(target && target === lastTarget)
   }
 
   private recordGazeData(data: any): void {
-    // Placeholder for gaze data recording logic
+    this.interactions.push({ type: 'gaze', data, timestamp: Date.now() })
+    this.enforceInteractionLimit()
+  }
+
+  // Enforce circular buffer on heatmapData to prevent unbounded growth
+  private enforceHeatmapLimit(): void {
+    if (this.heatmapData.length > this.MAX_HEATMAP_SIZE) {
+      // Remove oldest 10% of records (sliding window)
+      const trimCount = Math.floor(this.MAX_HEATMAP_SIZE * 0.1)
+      this.heatmapData.splice(0, trimCount)
+    }
+  }
+
+  // Enforce limit on interactions array
+  private enforceInteractionLimit(): void {
+    if (this.interactions.length > this.MAX_INTERACTIONS) {
+      const trimCount = Math.floor(this.MAX_INTERACTIONS * 0.1)
+      this.interactions.splice(0, trimCount)
+    }
   }
 }

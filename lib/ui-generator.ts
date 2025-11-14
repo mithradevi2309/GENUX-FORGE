@@ -127,77 +127,127 @@ export class UIGenerator {
 
   // Placeholder methods for missing implementations
   private loadDesignPatterns(): DesignPattern[] {
-    // Implementation here
-    return []
+    // Return a small set of reusable design patterns used by the generator.
+    return [
+      { id: 'single-column', name: 'Single column', description: 'Simple single column layout' },
+      { id: 'card-grid', name: 'Card grid', description: 'Cards arranged in a responsive grid' },
+      { id: 'sidebar-nav', name: 'Sidebar navigation', description: 'Persistent sidebar with nav items' },
+    ] as unknown as DesignPattern[]
   }
 
   private analyzeBehaviorPatterns(userProfile: UserProfile): any {
-    // Implementation here
-    return {}
+    // Produce a lightweight behavior summary used for layout decisions.
+    const personalizationAvg = (userProfile.personalizationScores || []).reduce((s: number, v: number) => s + v, 0) / Math.max(1, (userProfile.personalizationScores || []).length)
+    const completionRate = userProfile.completionRate || 0.6
+    const needsForm = (userProfile.formBehavior?.needsForm || false) || completionRate < 0.8
+    return { personalizationAvg, completionRate, needsForm }
   }
 
   private determineLayoutStrategy(behaviorAnalysis: any, context: InteractionContext): LayoutStrategy {
-    // Implementation here
-    return {} as LayoutStrategy
+    // Simple heuristic: if personalizationAvg high, use more personalized, else use conservative layout
+    const needsForm = Boolean(behaviorAnalysis.needsForm)
+    const layout: LayoutStrategy = {
+      needsForm,
+      columns: behaviorAnalysis.personalizationAvg > 3.5 ? 2 : 1,
+      prioritizeContent: behaviorAnalysis.completionRate < 0.7,
+    } as unknown as LayoutStrategy
+    return layout
   }
 
   private optimizeComponents(components: UIComponent[], context: InteractionContext): Promise<UIComponent[]> {
-    // Implementation here
-    return Promise.resolve(components)
+    // Light optimization: add accessibility hints and simple performance metadata
+    const optimized = components.map((c) => ({
+      ...c,
+      properties: {
+        ...(c.properties || {}),
+        ariaLabel: c.id || 'component',
+      },
+      performance: {
+        ...(c.performance || {}),
+        timeToInteract: c.performance?.timeToInteract || 250,
+      },
+    }))
+    return Promise.resolve(optimized)
   }
 
   private prioritizeNavigationItems(commonPaths: string[]): any {
-    // Implementation here
-    return []
+    // Return top 5 unique items preserving order
+    const seen = new Set<string>()
+    const items = []
+    for (const p of commonPaths) {
+      if (!seen.has(p)) {
+        seen.add(p)
+        items.push({ id: p, label: p.split('/').pop() || p })
+      }
+      if (items.length >= 5) break
+    }
+    return items
   }
 
   private determineNavLayout(length: number): any {
-    // Implementation here
-    return {}
+    return { type: length > 4 ? 'overflow' : 'inline', maxVisible: Math.min(5, length) }
   }
 
   private getOptimalColor(type: string): string {
-    // Implementation here
-    return ""
+    const palette: Record<string, string> = { navigation: '#0f172a', form: '#0369a1', content: '#111827' }
+    return palette[type] || '#111827'
   }
 
   private getOptimalTypography(type: string): any {
-    // Implementation here
-    return {}
+    return { fontFamily: 'Inter, system-ui, sans-serif', fontSize: type === 'navigation' ? 14 : 16 }
   }
 
   private getOptimalAnimations(type: string): any {
-    // Implementation here
-    return {}
+    return { easing: 'ease-out', durationMs: type === 'navigation' ? 150 : 200 }
   }
 
   private getOptimalFormPosition(formBehavior: FormBehavior): any {
-    // Implementation here
-    return {}
+    return { position: 'center', margin: 16 }
   }
 
   private getOptimalFormSize(formBehavior: FormBehavior): any {
-    // Implementation here
-    return {}
+    return { width: formBehavior?.preferredWidth || 600 }
   }
 
   private optimizeFieldOrder(completionPatterns: any): any {
-    // Implementation here
-    return []
+    // If we have completion patterns, sort fields by completion time ascending
+    if (!completionPatterns || !Array.isArray(completionPatterns)) return []
+    return completionPatterns.slice().sort((a: any, b: any) => (a.avgTime || 0) - (b.avgTime || 0)).map((f: any) => f.field)
   }
 
   private optimizeInputTypes(errorPatterns: any): any {
-    // Implementation here
-    return {}
+    // Map error types to input type suggestions
+    return { default: 'text', email: 'email', numeric: 'number' }
   }
 
   private generateSmartValidation(formBehavior: FormBehavior): any {
-    // Implementation here
-    return {}
+    return { liveValidate: true, rules: formBehavior?.rules || [] }
   }
 
   private generateOptimizedCTAs(conversionBehavior: any): Promise<UIComponent[]> {
-    // Implementation here
-    return Promise.resolve([])
+    // Return one primary CTA and one secondary CTA with simple labels
+    const primary = { id: 'cta-primary', type: 'button', properties: { label: conversionBehavior?.primaryLabel || 'Continue', priority: 1 } } as UIComponent
+    const secondary = { id: 'cta-secondary', type: 'button', properties: { label: conversionBehavior?.secondaryLabel || 'Cancel', priority: 2 } } as UIComponent
+    return Promise.resolve([primary, secondary])
+  }
+
+  private async generateContentLayout(readingPatterns: any): Promise<UIComponent> {
+    // Create a content layout component based on reading patterns (lightweight)
+    const preferredColumns = readingPatterns && readingPatterns.prefersTwoColumn ? 2 : 1
+    const layoutType = preferredColumns === 2 ? 'two-column' : 'single-column'
+    return {
+      id: `content-layout-${layoutType}`,
+      type: 'content',
+      properties: {
+        position: { x: 0, y: 0 },
+        size: { width: 100, height: 400 },
+        color: this.getOptimalColor('content'),
+        typography: this.getOptimalTypography('content'),
+        visibility: true,
+        priority: 3,
+      },
+      performance: { clickRate: 0, conversionRate: 0, errorRate: 0, timeToInteract: 0 },
+      adaptiveProperties: { layout: layoutType, columns: preferredColumns },
+    } as UIComponent
   }
 }

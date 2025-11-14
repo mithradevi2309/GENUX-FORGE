@@ -1,0 +1,149 @@
+{
+  "loadResults": [
+    {
+      "idx": 16,
+      "latency": 3937,
+      "success": true,
+      "conf": 0.85,
+      "len": 2364
+    },
+    {
+      "idx": 4,
+      "latency": 4890,
+      "success": true,
+      "conf": 0.85,
+      "len": 2312
+    },
+    {
+      "idx": 10,
+      "latency": 5501,
+      "success": true,
+      "conf": 0.85,
+      "len": 2861
+    },
+    {
+      "idx": 17,
+      "latency": 5674,
+      "success": true,
+      "conf": 0.85,
+      "len": 3219
+    },
+    {
+      "idx": 0,
+      "latency": 6624,
+      "success": true,
+      "conf": 0.85,
+      "len": 4200
+    },
+    {
+      "idx": 1,
+      "latency": 6524,
+      "success": true,
+      "conf": 0.85,
+      "len": 4362
+    },
+    {
+      "idx": 18,
+      "latency": 6328,
+      "success": true,
+      "conf": 0.85,
+      "len": 3336
+    },
+    {
+      "idx": 12,
+      "latency": 6758,
+      "success": true,
+      "conf": 0.85,
+      "len": 3581
+    },
+    {
+      "idx": 11,
+      "latency": 6859,
+      "success": true,
+      "conf": 0.85,
+      "len": 3762
+    },
+    {
+      "idx": 5,
+      "latency": 7069,
+      "success": true,
+      "conf": 0.85,
+      "len": 3590
+    },
+    {
+      "idx": 2,
+      "latency": 7177,
+      "success": true,
+      "conf": 0.85,
+      "len": 4223
+    },
+    {
+      "idx": 13,
+      "latency": 6974,
+      "success": true,
+      "conf": 0.85,
+      "len": 3591
+    },
+    {
+      "idx": 8,
+      "latency": 7176,
+      "success": true,
+      "conf": 0.85,
+      "len": 4352
+    },
+    {
+      "idx": 7,
+      "latency": 7177,
+      "success": true,
+      "conf": 0.85,
+      "len": 4400
+    },
+    {
+      "idx": 3,
+      "latency": 7380,
+      "success": true,
+      "conf": 0.85,
+      "len": 4265
+    },
+    {
+      "idx": 15,
+      "latency": 7180,
+      "success": true,
+      "conf": 0.85,
+      "len": 4322
+    },
+    {
+      "idx": 9,
+      "latency": 7285,
+      "success": true,
+      "conf": 0.85,
+      "len": 4418
+    },
+    {
+      "idx": 14,
+      "latency": 7292,
+      "success": true,
+      "conf": 0.85,
+      "len": 4287
+    },
+    {
+      "idx": 19,
+      "latency": 7190,
+      "success": true,
+      "conf": 0.85,
+      "len": 3598
+    },
+    {
+      "idx": 6,
+      "latency": 7501,
+      "success": true,
+      "conf": 0.85,
+      "len": 3937
+    }
+  ],
+  "summary": {
+    "total": 20,
+    "successCount": 20,
+    "avgLatency": 6624.8
+  }
+}

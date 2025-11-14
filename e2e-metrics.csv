@@ -1,0 +1,5 @@
+transition,statSig,statMs,llmMs,llmConf,respLen,success,driftScore,trueLabel
+chunk1->chunk2,0,4,5386,0.85,3277,1,0.46178794411714424,0
+chunk2->chunk3,0,4,6973,0.85,4284,1,0.46178794411714424,0
+chunk3->chunk4,0,4,5540,0.85,3371,1,0.46178794411714424,0
+chunk4->chunk5,0,2,6750,0.85,4113,1,0.46178794411714424,0
